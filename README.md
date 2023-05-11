@@ -6,5 +6,5 @@
 
 ## 5-11 打地鼠作业
 
-[作业 1](http://jianshu.com)
-[作业 2](http://jianshu.com)
+[作业 1](https://lhlovecoding.github.io/mywork/5-11/index.html)
+[作业 2](https://lhlovecoding.github.io/mywork/5-11/index.html)
