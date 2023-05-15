@@ -1,0 +1,9 @@
+body{
+    background-color: #2fbe2a;
+    font-size: 12px;
+}
+#box{
+    width: 500px;
+    height: 500px;
+    background: url(./1.jpg) no-repeat;
+}

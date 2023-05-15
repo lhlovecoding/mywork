@@ -1,0 +1,10 @@
+$color:blue;
+
+#box{
+    width: 500px;
+    height: 500px;
+    background: import('./img/1.jpg');
+}
+body{
+    color: $color;
+}

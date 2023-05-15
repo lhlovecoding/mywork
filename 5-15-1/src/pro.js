@@ -1,10 +1,3 @@
-import $ from "jquery";
-import "./index.css";
-import abc from "@/js/shopcar/index.js";
-$(function () {
-  $("li:even").css("background", "green");
-  abc.init();
-});
 //1.定义了名为info的装饰器
 function info(target) {
   //2.为目标添加静态属性
@@ -16,3 +9,4 @@ class Person {}
 
 //4.打印Person的静态属性info
 console.log(Person.info);
+export { Person };
