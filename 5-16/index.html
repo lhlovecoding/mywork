@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- 画布元素 -->
+    <canvas
+      id="canvas"
+      width="1500"
+      height="1500"
+      style="overflow: hidden; border: solid 20px #000"
+    ></canvas>
+
+    <script>
+      class Draw {
+        constructor(width, height) {
+          this.el = document.querySelector("#canvas");
+          this.app = this.el.getContext("2d");
+          this.btns = this.el.insertAdjacentElement(
+            "afterend",
+            document.createElement("div")
+          );
+          this.el.width = width;
+          this.el.height = height;
+          this.setBackground();
+          this.event();
+        }
+
+        //事件绑定
+        event() {
+          //bind会返回新函数，addEventListener与removeEventListener要使用相同函数
+          const callback = this.drawEventCallback.bind(this);
+
+          this.el.addEventListener("mousedown", () => {
+            //重新画线
+            this.app.beginPath();
+            //鼠标移动事件
+            this.el.addEventListener("mousemove", callback);
+          });
+
+          //鼠标抬起时移除事件
+          this.el.addEventListener("mouseup", () =>
+            this.el.removeEventListener("mousemove", callback)
+          );
+          return this;
+        }
+
+        //黑板写字的事件回调函数
+        drawEventCallback(event) {
+          this.app.lineTo(event.offsetX, event.offsetY);
+          this.app.strokeStyle = "white";
+          this.app.stroke();
+        }
+
+        //截图
+        short() {
+          const bt = document.createElement("button");
+          bt.innerText = "截图";
+          this.btns.insertAdjacentElement("beforeend", bt);
+          const img = new Image();
+          this.el.insertAdjacentElement("afterend", img);
+
+          bt.addEventListener("click", () => {
+            //使用canval标签的toDataURL方法，获取图片数据内容
+            img.src = this.el.toDataURL("image/jpeg");
+            img.style.cssText =
+              "width:300px;position:absolute;bottom:50px;right:0;border:solid 10px white;left:50%;transform:translateX(-50%);";
+          });
+          return this;
+        }
+
+        //清屏
+        clear() {
+          const bt = document.createElement("button");
+          bt.innerText = "清屏";
+          this.btns.insertAdjacentElement("beforeend", bt);
+          bt.addEventListener("click", () => {
+            this.app.fillStyle = "#000";
+            this.app.fillRect(0, 0, this.el.width, this.el.height);
+          });
+        }
+
+        //初始背景为黑色
+        setBackground() {
+          this.app.fillStyle = "#000";
+          this.app.fillRect(0, 0, this.el.width, this.el.height);
+        }
+      }
+
+      const blackboard = new Draw(800, 300);
+      blackboard.short();
+      blackboard.clear();
+    </script>
+  </body>
+</html>
