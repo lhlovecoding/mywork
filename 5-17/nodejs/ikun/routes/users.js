@@ -3,7 +3,6 @@ var router = express.Router();
 const fs = require("fs");
 
 router.get("/", function (req, res, next) {
-  console.log(333);
   fs.readFile("./data/user.json", (err, data) => {
     data = JSON.parse(data);
     let result = {
