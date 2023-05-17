@@ -1,0 +1,12 @@
+{
+  "name": "user",
+  "description": "用户管理",
+  "version": "1.0",
+  "auto_id": 28,
+  "datalist": [
+    { "id": 1, "name": "蔡徐坤", "age": 18 },
+    { "id": 2, "name": "王一博", "age": 20 },
+    { "id": 3, "name": "王二小", "age": 90 },
+    { "id": 28, "name": "李四", "age": 999 }
+  ]
+}
