@@ -8,21 +8,44 @@
   </head>
   <body>
     <div id="box"></div>
+    <button id="login">登录</button>
+    <button id="users">users</button>
     <script src="../../common/jquery/jquery.min.js"></script>
     <script>
+      var token = "";
       (function () {
-        $.ajax({
-          url: "http://127.0.0.1:3000/users/add",
-          type: "post",
-          data: {
-            name: "李四",
-            age: 999,
-          },
-          dataType: "json",
-          success: function (res) {
-            console.log(res);
-          },
-        });
+        login.onclick = function () {
+          $.ajax({
+            url: "http://127.0.0.1:3000/login",
+            type: "post",
+            data: {
+              username: "user1",
+              password: 123456,
+            },
+            dataType: "json",
+            success: function (res) {
+              console.log(res);
+              token = res.token;
+            },
+          });
+        };
+        users.onclick = async function () {
+          const response = await fetch("http://127.0.0.1:3000/users", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const data = await response.json();
+          // $.ajax({
+          //   url: "http://127.0.0.1:3000/users",
+          //   type: "get",
+          //   headers: {
+          //     Authorization: `Bearer ${token}`,
+          //   },
+          //   dataType: "json",
+          //   success: function (res) {
+          //     console.log(res);
+          //   },
+          // });
+        };
       })();
     </script>
   </body>

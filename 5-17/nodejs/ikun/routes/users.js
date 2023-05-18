@@ -1,18 +1,25 @@
 var express = require("express");
+const { expressjwt: jwt } = require("express-jwt");
 var router = express.Router();
 const fs = require("fs");
 
-router.get("/", function (req, res, next) {
-  fs.readFile("./data/user.json", (err, data) => {
-    data = JSON.parse(data);
-    let result = {
-      code: 200,
-      msg: "success",
-      data: data.datalist,
-    };
-    res.send(JSON.stringify(result));
-  });
-});
+const secretKey = "ikuns";
+router.get(
+  "/",
+  jwt({ secret: secretKey, algorithms: ["HS256"] }),
+  function (req, res, next) {
+    console.log(88888888888);
+    fs.readFile("./data/user.json", (err, data) => {
+      data = JSON.parse(data);
+      let result = {
+        code: 200,
+        msg: "success",
+        data: data.datalist,
+      };
+      res.send(JSON.stringify(result));
+    });
+  }
+);
 router.post("/add", function (req, res, next) {
   fs.readFile("./data/user.json", (err, user1) => {
     let user = JSON.parse(user1);
