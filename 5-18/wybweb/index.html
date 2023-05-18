@@ -7,16 +7,37 @@
     <title>Document</title>
   </head>
   <body>
-    <div id="box"></div>
+    <div id="box">
+      用户名：<input type="text" id="username" /><br />
+      密码：<input type="password" name="" id="pwd" />
+      <button id="login-btn">登录</button>
+    </div>
     <button id="getuser">获取用户列表</button>
     <button id="adduser">添加用户</button>
     <button id="getuserbyid">通过ID获取用户</button>
     <button id="upuserbyid">通过ID修改用户</button>
     <button id="deluserbyid">通过ID删除用户</button>
     <script src="../../common/jquery/jquery.min.js"></script>
+
     <script>
       let id = 2;
+      let token = "";
       $(function () {
+        $("#login-btn").click(() => {
+          let data = {
+            username: $("#username").val(),
+            password: $("#pwd").val(),
+          };
+          $.ajax({
+            type: "post",
+            url: "http://127.0.0.1:3000/login",
+            dataType: "json",
+            data: data,
+            success: function (response) {
+              token = response.token;
+            },
+          });
+        });
         $("#upuserbyid").click(function () {
           $.ajax({
             type: "PUT",
@@ -56,6 +77,9 @@
             type: "get",
             url: "http://127.0.0.1:3000/users",
             dataType: "json",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
             success: function (response) {
               console.log(response);
             },
@@ -69,9 +93,18 @@
               name: "李四",
               age: 20,
             },
+            headers: {
+              Authorization: "Bearer " + token,
+            },
             dataType: "json",
             success: function (response) {
               console.log(response);
+            },
+            error: function (err) {
+              console.log(err);
+              if (err.status == 401) {
+                alert("请先登录");
+              }
             },
           });
         });

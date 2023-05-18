@@ -1,1 +1,14 @@
-{"name":"users","auto_id":2,"list":[{"id":"2","name":"蔡徐坤","age":"38"}]}
+{
+  "name": "users",
+  "auto_id": 3,
+  "list": [
+    { "id": 3, "name": "李四", "age": 20 },
+    {
+      "id": "2",
+      "name": "蔡徐坤",
+      "age": "38",
+      "username": "caixukun",
+      "password": "123456"
+    }
+  ]
+}

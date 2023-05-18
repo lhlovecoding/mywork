@@ -6,11 +6,17 @@ var logger = require("morgan");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
+var loginRouter = require("./routes/login");
 var app = express();
+require("dotenv").config();
+app.set("secretKey", process.env.JWT_SECRET);
 //设置跨域访问
 app.all("*", function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With,Content-Type");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With,Content-Type,Authorization"
+  );
   res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
   res.header("Content-Type", "application/json;charset=utf-8");
   next();
@@ -27,6 +33,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/login", loginRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
