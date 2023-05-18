@@ -8,7 +8,6 @@ router.get(
   "/",
   jwt({ secret: secretKey, algorithms: ["HS256"] }),
   function (req, res, next) {
-    console.log(88888888888);
     fs.readFile("./data/user.json", (err, data) => {
       data = JSON.parse(data);
       let result = {

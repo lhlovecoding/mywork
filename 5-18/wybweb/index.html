@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="box"></div>
+    <button id="getuser">获取用户列表</button>
+    <button id="adduser">添加用户</button>
+    <button id="getuserbyid">通过ID获取用户</button>
+    <button id="upuserbyid">通过ID修改用户</button>
+    <button id="deluserbyid">通过ID删除用户</button>
+    <script src="../../common/jquery/jquery.min.js"></script>
+    <script>
+      let id = 2;
+      $(function () {
+        $("#upuserbyid").click(function () {
+          $.ajax({
+            type: "PUT",
+            url: "http://127.0.0.1:3000/users/save?id=" + id,
+            data: {
+              name: "蔡徐坤",
+              age: 38,
+            },
+            dataType: "json",
+            success: function (response) {
+              console.log(response);
+            },
+          });
+        });
+        $("#deluserbyid").click(function () {
+          $.ajax({
+            url: "http://127.0.0.1:3000/users/del?id=" + id,
+            type: "DELETE",
+            dataType: "json",
+            success: function (response) {
+              console.log(response);
+            },
+          });
+        });
+        $("#getuserbyid").click(function () {
+          $.ajax({
+            url: "http://127.0.0.1:3000/users/info?id=" + id,
+            type: "get",
+            dataType: "json",
+            success: function (response) {
+              console.log(response);
+            },
+          });
+        });
+        $("#getuser").click(function () {
+          $.ajax({
+            type: "get",
+            url: "http://127.0.0.1:3000/users",
+            dataType: "json",
+            success: function (response) {
+              console.log(response);
+            },
+          });
+        });
+        $("#adduser").click(function () {
+          $.ajax({
+            type: "post",
+            url: "http://127.0.0.1:3000/users/add",
+            data: {
+              name: "李四",
+              age: 20,
+            },
+            dataType: "json",
+            success: function (response) {
+              console.log(response);
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
