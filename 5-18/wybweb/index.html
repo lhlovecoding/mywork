@@ -8,7 +8,11 @@
   </head>
   <body>
     <div id="box">
-      用户名：<input type="text" id="username" /><br />
+      真实姓名：<input type="text" id="realname" /><br />
+      真实年龄：<input type="text" name="" id="age" /> 用户名：<input
+        type="text"
+        id="username"
+      /><br />
       密码：<input type="password" name="" id="pwd" />
       <button id="login-btn">登录</button>
     </div>
@@ -24,77 +28,14 @@
       let token = "";
       $(function () {
         $("#login-btn").click(() => {
-          let data = {
-            username: $("#username").val(),
-            password: $("#pwd").val(),
-          };
           $.ajax({
             type: "post",
-            url: "http://127.0.0.1:3000/login",
-            dataType: "json",
-            data: data,
-            success: function (response) {
-              token = response.token;
-            },
-          });
-        });
-        $("#upuserbyid").click(function () {
-          $.ajax({
-            type: "PUT",
-            url: "http://127.0.0.1:3000/users/save?id=" + id,
-            data: {
-              name: "蔡徐坤",
-              age: 38,
-            },
-            dataType: "json",
-            success: function (response) {
-              console.log(response);
-            },
-          });
-        });
-        $("#deluserbyid").click(function () {
-          $.ajax({
-            url: "http://127.0.0.1:3000/users/del?id=" + id,
-            type: "DELETE",
-            dataType: "json",
-            success: function (response) {
-              console.log(response);
-            },
-          });
-        });
-        $("#getuserbyid").click(function () {
-          $.ajax({
-            url: "http://127.0.0.1:3000/users/info?id=" + id,
-            type: "get",
-            dataType: "json",
-            success: function (response) {
-              console.log(response);
-            },
-          });
-        });
-        $("#getuser").click(function () {
-          $.ajax({
-            type: "get",
             url: "http://127.0.0.1:3000/users",
-            dataType: "json",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            success: function (response) {
-              console.log(response);
-            },
-          });
-        });
-        $("#adduser").click(function () {
-          $.ajax({
-            type: "post",
-            url: "http://127.0.0.1:3000/users/add",
             data: {
-              name: "李四",
-              age: 20,
-            },
-            headers: {
-              Authorization: "Bearer " + token,
+              name: $("#realname").val(),
+              age: $("#age").val(),
+              password: $("#pwd").val(),
+              username: $("#username").val(),
             },
             dataType: "json",
             success: function (response) {
@@ -108,7 +49,68 @@
             },
           });
         });
+        // let data = {
+        //   username: $("#username").val(),
+        //   password: $("#pwd").val(),
+        // };
+        // $.ajax({
+        //   type: "post",
+        //   url: "http://127.0.0.1:3000/login",
+        //   dataType: "json",
+        //   data: data,
+        //   success: function (response) {
+        //     token = response.token;
+        //   },
+        // });
       });
+      $("#upuserbyid").click(function () {
+        $.ajax({
+          type: "PUT",
+          url: "http://127.0.0.1:3000/users/save?id=" + id,
+          data: {
+            name: "蔡徐坤",
+            age: 38,
+          },
+          dataType: "json",
+          success: function (response) {
+            console.log(response);
+          },
+        });
+      });
+      $("#deluserbyid").click(function () {
+        $.ajax({
+          url: "http://127.0.0.1:3000/users/del?id=" + id,
+          type: "DELETE",
+          dataType: "json",
+          success: function (response) {
+            console.log(response);
+          },
+        });
+      });
+      $("#getuserbyid").click(function () {
+        $.ajax({
+          url: "http://127.0.0.1:3000/users/info?id=" + id,
+          type: "get",
+          dataType: "json",
+          success: function (response) {
+            console.log(response);
+          },
+        });
+      });
+      $("#getuser").click(function () {
+        $.ajax({
+          type: "get",
+          url: "http://127.0.0.1:3000/users",
+          dataType: "json",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          success: function (response) {
+            console.log(response);
+          },
+        });
+      });
+      $("#adduser").click(function () {});
     </script>
   </body>
 </html>
