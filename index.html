@@ -1,15 +1,92 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>留言板</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f1f1f1;
+      }
+      form {
+        width: 80%;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      }
+      label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: bold;
+      }
+      input[type="text"],
+      textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+      input[type="submit"] {
+        width: 100%;
+        background-color: #4caf50;
+        color: #fff;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      input[type="submit"]:hover {
+        background-color: #3e8e41;
+      }
+      h1 {
+        text-align: center;
+        margin-top: 50px;
+        font-size: 36px;
+      }
+      hr {
+        border: none;
+        border-bottom: 2px solid #ccc;
+        margin: 50px 0;
+      }
+      .message {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        margin-bottom: 30px;
+      }
+      .message h2 {
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+      .message p {
+        font-size: 16px;
+        margin-bottom: 0;
+      }
+      .message span {
+        font-size: 14px;
+        color: #999;
+      }
+    </style>
   </head>
   <body>
-    <div id="box">
-      <a href="./5-11/index.html"> 5-11</a>
+    <h1>留言板</h1>
+    <form action="" method="post">
+      <label for="name">姓名：</label>
+      <input type="text" id="name" name="name" />
+      <label for="email">邮箱：</label>
+      <input type="text" id="email" name="email" />
+      <label for="message">留言：</label>
+      <textarea id="message" name="message"></textarea>
+      <input type="submit" value="提交" />
+    </form>
+    <hr />
+    <div class="messages">
+      <!-- 在这里插入留言列表 -->
     </div>
-    <script></script>
   </body>
 </html>

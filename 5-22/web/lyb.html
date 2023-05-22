@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>留言板</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Roboto", sans-serif;
+        margin-top: 50px;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: linear-gradient(200deg, skyblue, #eee, #ffc0cb);
+        overflow: auto;
+      }
+
+      #container {
+        display: flex;
+        background-color: rgba(0, 0, 0, 0.3);
+        width: 80%;
+        padding: 0 auto;
+      }
+      #comment-box {
+        background-color: rgba(0, 0, 0, 0.3);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 600px;
+        height: 100%;
+        padding: 21px;
+        word-wrap: break-word;
+      }
+      h1 {
+        margin-top: 20px;
+        margin-left: 10px;
+        margin-bottom: 15px;
+        text-align: center;
+        color: black;
+      }
+
+      #ly-title {
+        margin-left: 234px;
+        width: 20%;
+        height: 10px;
+        background-color: #eee;
+        padding: 10px;
+        border-radius: 26px;
+        margin-bottom: 10px;
+      }
+      .header {
+        margin: 45px 20px;
+
+        font-size: 23px;
+        font-weight: 600;
+      }
+      textarea {
+        background-color: #eee;
+        padding: 20px !important;
+        border-radius: 26px;
+        margin-bottom: 15px;
+        margin-left: 80px;
+        resize: none;
+        width: 78%;
+        height: 150px;
+      }
+      hr {
+        border: 0;
+        width: 100%;
+        border-top: 1px solid black;
+        border-bottom: 1px solid #eee;
+      }
+      span.date {
+        float: right;
+        font-size: 12px;
+        font-weight: 300;
+        margin-right: 20px;
+      }
+      #btn-submit {
+        background-color: gray;
+        margin-left: 450px;
+        color: white;
+        font-size: 5px;
+        width: 20%;
+        height: 30px;
+        text-align: center;
+        border-radius: 5px;
+      }
+
+      #btn-submit:hover {
+        color: black;
+        background: linear-gradient(200deg, skyblue, #eee, #ffc0cb);
+      }
+      #commentslist {
+        font-size: 14px;
+        border-radius: 15px;
+        bottom: 10px;
+        margin-bottom: 10px auto;
+      }
+    </style>
+  </head>
+  <body>
+    <button onclick="location.href='login.html'">登录</button
+    ><button onclick="location.href='register.html'">注册</button>
+    <div class="container">
+      <div id="comment-box">
+        <h1>留言板</h1>
+        <div>
+          <input type="text" id="ly-title" placeholder="请输入主题" />
+        </div>
+        <div style="margin-left: 17%">
+          <textarea
+            name=""
+            id="comment"
+            cols="30"
+            rows="10"
+            placeholder="请输入你想对他（她）说的话..."
+          ></textarea>
+        </div>
+
+        <button id="btn-submit">发布留言</button>
+      </div>
+    </div>
+    <div style="width: 50%">
+      <h4 class="header" style="text-align: center">留言板列表</h4>
+      <div id="commentslist"></div>
+    </div>
+    <link rel="stylesheet" href="./node_modules/layui/dist/css/layui.css" />
+    <script src="./node_modules/layui/dist/layui.js"></script>
+    <style>
+      .del {
+        color: cadetblue;
+        font-size: 15px;
+        float: right;
+      }
+    </style>
+    <script>
+      layui.use(function () {
+        var form = layui.form;
+        var layer = layui.layer;
+        var $ = layui.$;
+        $(function () {
+          getList();
+          $("#commentslist").on("click", delFun);
+        });
+        function delFun() {
+          event.preventDefault();
+          if ($(event.target).attr("data-id")) {
+            $.ajax({
+              url:
+                "http://localhost:3000/lyb/del/" +
+                $(event.target).attr("data-id"),
+              type: "DELETE",
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+              dataType: "json",
+              success: function (res) {
+                if (res.status == -1) {
+                  layer.msg(res.msg);
+                }
+                if (res.modifiedCount == 1) {
+                  getList();
+                  layer.msg("删除成功");
+                }
+              },
+              error: function (err) {
+                if (err.status == 401) {
+                  layer.msg("请先登录");
+                }
+              },
+            });
+          }
+        }
+        function getList() {
+          $.get("http://localhost:3000/lyb", (res) => {
+            let html = "";
+            res.forEach((item) => {
+              html += `<div style="background:${
+                item.user_id.sex == "女" ? "pink" : "blue"
+              }"> <hr />
+                      <h2>
+                        主题：
+                        <span>${item.title}</span>
+                        <span class="date">${item.create_time}</span>
+                      </h2>
+                      <h3>昵称：<span>${item.nickname}</span></h3>
+                      <p>内容：${item.content}</p>
+                      <p class="del"><a href="#" data-id="${
+                        item._id
+                      }">删除</a></p></div>`;
+            });
+            $("#commentslist").html(html);
+          });
+        }
+        $("#btn-submit").click(() => {
+          let data = {
+            title: $("#ly-title").val(),
+            con: $("#comment").val(),
+          };
+          $.ajax({
+            url: "http://localhost:3000/lyb/add",
+            type: "post",
+            data: data,
+            dataType: "json",
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+            success: function (res) {
+              getList();
+              layer.msg(res.msg);
+            },
+            error: function (err) {
+              if (err.status == 401) {
+                layer.msg("请先登录");
+              }
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
