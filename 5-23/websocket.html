@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    消息：<input type="text" id="msg" />
+    <button id="send">发送</button>
+    用户名：<input type="text" id="username" />
+    <button id="login">登录</button>
+    <div>
+      当前在线用户：
+      <ul></ul>
+    </div>
+    <script
+      src="https://cdn.socket.io/4.4.1/socket.io.min.js"
+      integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H"
+      crossorigin="anonymous"
+    ></script>
+    <script src="../common/jquery/jquery.min.js"></script>
+    <script>
+      $(function () {
+        $("#login").click(login);
+        $("#send").click(send);
+      });
+      function send() {
+        const msg = document.getElementById("msg").value;
+        socket.emit("message", msg);
+      }
+      function login() {
+        let data = {
+          username: $("#username").val(),
+        };
+        $.ajax({
+          type: "post",
+          url: "http://127.0.0.1:3001",
+          dataType: "json",
+          data: data,
+          success: function (res) {
+            if (res.uuid) {
+              alert("登录成功,uuid为" + res.uuid);
+              const socket = io("http://127.0.0.1:3001");
+              socket.emit("join", res.uuid); // 加入房间
+              socket.on("message", (msg) => {
+                console.log("收到消息：", msg);
+              });
+            } else {
+              alert(res.msg);
+            }
+          },
+        });
+      }
+    </script>
+  </body>
+</html>

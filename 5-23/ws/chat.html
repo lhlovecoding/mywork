@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="box">
+      当前在线用户：
+      <ul>
+        <li>张三</li>
+      </ul>
+    </div>
+    <script
+      src="https://cdn.socket.io/4.4.1/socket.io.min.js"
+      integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H"
+      crossorigin="anonymous"
+    ></script>
+    <script src="javascripts/jquery.min.js"></script>
+    <script>
+      let user;
+      $(function () {
+        if (localStorage.getItem("user") == null) {
+          alert("请先登录");
+          location.href = "./login";
+        }
+        user = JSON.parse(localStorage.getItem("user"));
+        conws();
+      });
+      function conws() {
+        const socket = io("http://127.0.0.1:3000", {
+          withCredentials: true,
+        });
+        socket.emit("join", user._id); // 加入房间
+        socket.on("message", (msg) => {
+          if (msg.code == 401) {
+            alert(msg.msg);
+            location.href = "./login";
+          } else {
+            console.log("收到消息：", msg);
+            if (msg.userlist.length > 0) {
+              let html = "";
+              msg.userlist.forEach((item) => {
+                html += `<li>${item.username}</li>`;
+              });
+              $("#box ul").html(html);
+            }
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
